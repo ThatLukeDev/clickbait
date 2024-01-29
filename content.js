@@ -1,22 +1,44 @@
-let srcUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/800px-Google_2015_logo.svg.png";
+let imgUrls = ["https://tr.rbxcdn.com/a5d6e309dfaf0a7c7320c8e30326368b/420/420/Hat/Png"];
 
-let images = Array.from(document.getElementsByTagName("img"));
+function overlayImages(imageUrlsArray) {
+    let images = Array.from(document.getElementsByTagName("img"));
 
-images.forEach((image) => {
-    let bounds = image.getBoundingClientRect();
+    images.forEach((image) => {
+        let bounds = image.getBoundingClientRect();
 
-    let overlay = document.createElement("img");
+        let overlay = document.createElement("img");
 
-    overlay.src = srcUrl;
+        image.classList.add("clickbaitOverlayBack");
+        overlay.classList.add("clickbaitOverlayImg");
 
-    overlay.width = bounds.right - bounds.left;
-    overlay.height = bounds.bottom - bounds.top;
+        overlay.src = imgUrls[Math.floor(Math.random() * imgUrls.length)];
 
-    overlay.style.zIndex = 32767;
-    overlay.style.position = "fixed";
+        overlay.width = bounds.right - bounds.left;
+        overlay.height = bounds.bottom - bounds.top;
 
-    overlay.style.top = bounds.top + "px";
-    overlay.style.left = bounds.left + "px";
+        overlay.style.zIndex = 32767;
+        overlay.style.position = "fixed";
 
-    image.parentNode.insertBefore(overlay, image.nextSibling);
-})
+        overlay.style.top = bounds.top + "px";
+        overlay.style.left = bounds.left + "px";
+
+        image.parentNode.insertBefore(overlay, image.nextSibling);
+    });
+}
+
+chrome.storage.local.get("enabled", (result) => {
+    if (!result.enabled) {
+        return;
+    }
+
+    chrome.storage.local.get("imgUrls", (result) => {
+        imgUrls = result.imgUrls.split(",");
+        overlayImages(imgUrls);
+    });
+
+    setTimeout(() => {
+        if (document.getElementsByClassName("clickbaitOverlayImg").length < 1) {
+            overlayImages(imgUrls);
+        }
+    }, 100);
+});
