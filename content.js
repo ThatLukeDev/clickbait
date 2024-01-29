@@ -17,12 +17,17 @@ function overlayImages(imageUrlsArray) {
         overlay.height = bounds.bottom - bounds.top;
 
         overlay.style.zIndex = 32767;
-        overlay.style.position = "fixed";
+        overlay.style.position = "absolute";
 
-        overlay.style.top = bounds.top + "px";
-        overlay.style.left = bounds.left + "px";
+        overlay.style.top = "0px";
+        overlay.style.left = "0px";
 
-        image.parentNode.insertBefore(overlay, image.nextSibling);
+        let container = document.createElement("span");
+        container.classList.add("clickbaitOverlaySpan");
+
+        image.parentNode.insertBefore(container, image);
+        container.appendChild(image);
+        container.appendChild(overlay);
     });
 }
 
