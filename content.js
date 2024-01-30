@@ -39,7 +39,7 @@ chrome.storage.local.get("enabled", (result) => {
     }
 
     chrome.storage.local.get("imgUrls", (result) => {
-        imgUrls = result.imgUrls.split(",");
+        imgUrls = result.imgUrls.split("|");
         overlayImages(imgUrls);
     });
 
@@ -55,7 +55,11 @@ let instanceOverlayObserver = new MutationObserver(mutations => {
         Array.from(mutation.addedNodes).forEach((element) => {
             if (element instanceof HTMLImageElement && element.parentElement.classList) {
                 if (!element.parentElement.classList.contains("clickbaitOverlaySpan")) {
-                    overlayImage(imgUrls, element);
+                    chrome.storage.local.get("enabled", (result) => {
+                        if (result.enabled) {
+                            overlayImage(imgUrls, element);
+                        }
+                    });
                 }
             }
         });
