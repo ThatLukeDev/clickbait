@@ -67,8 +67,37 @@ Array.from(document.getElementsByClassName("format")).forEach((btn) => {
 
 chrome.storage.local.get("format", (result) => {
     Array.from(document.getElementsByClassName("format")).forEach((btn) => {
-console.log(result.format, btn.value);
         if (result.format == btn.value) {
+            btn.checked = true;
+        }
+    });
+});
+
+Array.from(document.getElementsByClassName("posX")).forEach((btn) => {
+    btn.addEventListener("change", (e) => {
+        if (btn.checked) {
+            chrome.storage.local.set({"posX": btn.value});
+        }
+    });
+});
+Array.from(document.getElementsByClassName("posY")).forEach((btn) => {
+    btn.addEventListener("change", (e) => {
+        if (btn.checked) {
+            chrome.storage.local.set({"posY": btn.value});
+        }
+    });
+});
+
+chrome.storage.local.get("posX", (result) => {
+    Array.from(document.getElementsByClassName("posX")).forEach((btn) => {
+        if (result.posX == btn.value) {
+            btn.checked = true;
+        }
+    });
+});
+chrome.storage.local.get("posY", (result) => {
+    Array.from(document.getElementsByClassName("posY")).forEach((btn) => {
+        if (result.posY == btn.value) {
             btn.checked = true;
         }
     });

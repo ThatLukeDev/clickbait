@@ -11,22 +11,45 @@
             <input type="checkbox" id="enabled" name="enabled">
             <label for="enabled">Enabled</label><br>
         </div>
-        <br>
+
+        <br><br>
+
+        <a>Scale:</a><br>
         <div>
-            <a>Aspect:</a><br>
-            <input type="radio" class="format" name="format" value="stretch" checked>
+            <input type="radio" class="format" name="format" value="auto" checked>
+            <label for="auto">Auto</label><br>
+            <input type="radio" class="format" name="format" value="stretch">
             <label for="stretch">Stretch</label><br>
             <input type="radio" class="format" name="format" value="width">
             <label for="width">Width</label><br>
             <input type="radio" class="format" name="format" value="height">
             <label for="height">Height</label><br>
         </div>
+
         <br>
+        <a>Lock:</a><br>
+        <div>
+            <input type="radio" class="posY" name="posY" value="top" checked>
+            <label for="width">Top</label><br>
+            <input type="radio" class="posY" name="posY" value="bottom">
+            <label for="height">Bottom</label><br>
+        </div>
+        <div>
+            <input type="radio" class="posX" name="posX" value="left" checked>
+            <label for="width">Left</label><br>
+            <input type="radio" class="posX" name="posX" value="right">
+            <label for="height">Right</label><br>
+        </div>
+
+        <br><br>
+
         <div>
             <label for="images">Urls (psv): (enter to save)</label>
             <input type="text" id="images" name="images"><br>
         </div>
-        <br>
+
+        <br><br>
+
         <div>
             <input type="file" id="upload" name="upload" accept="image/*">
             <br>

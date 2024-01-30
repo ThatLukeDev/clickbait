@@ -1,8 +1,9 @@
 let imgUrls = ["https://tr.rbxcdn.com/a5d6e309dfaf0a7c7320c8e30326368b/420/420/Hat/Png"];
+let scale = "stretch";
+let posX = false;
+let posY = false;
 
 function overlayImage(imageUrlsArray, image) {
-    let bounds = image.getBoundingClientRect();
-
     let overlay = document.createElement("img");
 
     image.classList.add("clickbaitOverlayBack");
@@ -10,14 +11,44 @@ function overlayImage(imageUrlsArray, image) {
 
     overlay.src = imgUrls[Math.floor(Math.random() * imgUrls.length)];
 
-    overlay.width = bounds.right - bounds.left;
-    overlay.height = bounds.bottom - bounds.top;
+    switch (scale) {
+        case "scale":
+            overlay.width = image.width;
+            overlay.height = image.height;
+            break;
+        case "width":
+            overlay.width = image.width;
+            break;
+        case "height":
+            overlay.height = image.height;
+            break;
+        default:
+            let aspectSrc = image.width / image.height;
+            let aspect = overlay.width / overlay.height;
+            if (aspect > aspectSrc) {
+                overlay.width = image.width;
+            }
+            else {
+                overlay.height = image.height;
+            }
+            break;
+    }
 
     overlay.style.zIndex = 32767;
     overlay.style.position = "absolute";
 
-    overlay.style.top = "0px";
-    overlay.style.left = "0px";
+    if (posX) {
+        overlay.style.right = "0px";
+    }
+    else {
+        overlay.style.left = "0px";
+    }
+    if (posY) {
+        overlay.style.bottom = "0px";
+    }
+    else {
+        overlay.style.top = "0px";
+    }
 
     let container = document.createElement("span");
     container.classList.add("clickbaitOverlaySpan");
@@ -28,9 +59,24 @@ function overlayImage(imageUrlsArray, image) {
 }
 
 function overlayImages(imageUrlsArray) {
-    let images = Array.from(document.getElementsByTagName("img"));
+    chrome.storage.local.get("format", (result) => {
+        scale = result.format;
+    });
+    chrome.storage.local.get("posX", (result) => {
+        if (result.posX == "right") {
+            posX = true;
+        }
+    });
+    chrome.storage.local.get("posY", (result) => {
+        if (result.posY == "bottom") {
+            posY = true;
+        }
+    });
 
-    images.forEach((image) => overlayImage(imageUrlsArray, image));
+    setTimeout(() => {
+        let images = Array.from(document.getElementsByTagName("img"));
+        images.forEach((image) => overlayImage(imageUrlsArray, image));
+    }, 10);
 }
 
 chrome.storage.local.get("enabled", (result) => {
