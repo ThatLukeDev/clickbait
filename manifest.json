@@ -4,15 +4,15 @@
     "description": "Add an image over all images on a webpage.",
     "version": "1.0.0",
     "action": {
-        "default_popup": "index.html",
-        "default_icon": "favicon.png"
+        "default_popup": "window/index.html",
+        "default_icon": "icons/128.png"
     },
     "permissions": [
         "storage"
     ],
     "content_scripts": [
         {
-            "js": ["content.js"],
+            "js": ["script.js"],
             "matches": [
                 "<all_urls>"
             ]
