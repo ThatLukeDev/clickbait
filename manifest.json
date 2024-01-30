@@ -5,7 +5,12 @@
     "version": "1.0.0",
     "action": {
         "default_popup": "window/index.html",
-        "default_icon": "icons/128.png"
+        "default_icon": {
+            "16": "icons/16.png",
+            "32": "icons/32.png",
+            "48": "icons/48.png",
+            "128": "icons/128.png"
+        }
     },
     "permissions": [
         "storage"
