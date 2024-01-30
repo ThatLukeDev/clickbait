@@ -34,7 +34,6 @@ function overlayImage(imageUrlsArray, image) {
             break;
     }
 
-    overlay.style.zIndex = 32767;
     overlay.style.position = "absolute";
 
     if (posX) {
