@@ -56,3 +56,20 @@ imgUpload.addEventListener("change", (e) => {
 
     reader.readAsDataURL(e.currentTarget.files[0]);
 });
+
+Array.from(document.getElementsByClassName("format")).forEach((btn) => {
+    btn.addEventListener("change", (e) => {
+        if (btn.checked) {
+            chrome.storage.local.set({"format": btn.value});
+        }
+    });
+});
+
+chrome.storage.local.get("format", (result) => {
+    Array.from(document.getElementsByClassName("format")).forEach((btn) => {
+console.log(result.format, btn.value);
+        if (result.format == btn.value) {
+            btn.checked = true;
+        }
+    });
+});

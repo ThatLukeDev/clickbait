@@ -9,18 +9,30 @@
     <body>
         <div>
             <input type="checkbox" id="enabled" name="enabled">
-            <label for="enabled">Enabled</label>
+            <label for="enabled">Enabled</label><br>
+        </div>
+        <br>
+        <div>
+            <a>Aspect:</a><br>
+            <input type="radio" class="format" name="format" value="stretch" checked>
+            <label for="stretch">Stretch</label><br>
+            <input type="radio" class="format" name="format" value="width">
+            <label for="width">Width</label><br>
+            <input type="radio" class="format" name="format" value="height">
+            <label for="height">Height</label><br>
         </div>
         <br>
         <div>
             <label for="images">Urls (psv): (enter to save)</label>
-            <input type="text" id="images" name="images">
+            <input type="text" id="images" name="images"><br>
         </div>
+        <br>
         <div>
             <input type="file" id="upload" name="upload" accept="image/*">
+            <br>
         </div>
-        <div id="imgDisplay" class="imageFlex">
-        </div>
+        <br>
+        <div id="imgDisplay" class="imageFlex"></div>
     </body>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
