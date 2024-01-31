@@ -11,8 +11,10 @@ function overlayImage(imageUrlsArray, image) {
 
     overlay.src = imgUrls[Math.floor(Math.random() * imgUrls.length)];
 
+    overlay.style.cssText = image.style.cssText;
+
     switch (scale) {
-        case "scale":
+        case "stretch":
             overlay.width = image.width;
             overlay.height = image.height;
             break;
@@ -92,7 +94,7 @@ chrome.storage.local.get("enabled", (result) => {
         if (document.getElementsByClassName("clickbaitOverlayImg").length < 1) {
             overlayImages(imgUrls);
         }
-    }, 100);
+    }, 1000);
 });
 
 let instanceOverlayObserver = new MutationObserver(mutations => {
