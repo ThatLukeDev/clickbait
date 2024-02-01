@@ -2,6 +2,8 @@ let enabled = document.getElementById("enabled");
 let imgUrls = document.getElementById("images");
 let imgDisplay = document.getElementById("imgDisplay");
 let imgUpload = document.getElementById("upload");
+let syncBtn = document.getElementById("sync");
+let sync = false;
 
 function refreshImgDisplay() {
     imgDisplay.innerHTML = "";
@@ -12,32 +14,57 @@ function refreshImgDisplay() {
         img.addEventListener("click", () => {
             imgUrls.value = imgUrls.value.replace(imgSrc + "|", "");
             imgUrls.value = imgUrls.value.replace(imgSrc, "");
+
             chrome.storage.local.set({"imgUrls": imgUrls.value});
+            if (sync) {
+                chrome.storage.sync.set({"imgUrls": imgUrls.value});
+            }
+
             refreshImgDisplay();
         });
     });
 }
 
-chrome.storage.local.get("enabled", (result) => {
-    enabled.checked = result.enabled;
-});
+if (sync) {
+    chrome.storage.sync.get("enabled", (result) => {
+        enabled.checked = result.enabled;
+    });
+}
+else {
+    chrome.storage.local.get("enabled", (result) => {
+        enabled.checked = result.enabled;
+    });
+}
 
 enabled.addEventListener("change", (e) => {
     if (e.currentTarget.checked) {
         chrome.storage.local.set({"enabled": true});
+        chrome.storage.sync.set({"enabled": true});
     }
     else {
         chrome.storage.local.set({"enabled": false});
+        chrome.storage.sync.set({"enabled": false});
     }
 });
 
-chrome.storage.local.get("imgUrls", (result) => {
-    imgUrls.value = result.imgUrls;
-    refreshImgDisplay();
-});
+{
+    let main = (result) => {
+        imgUrls.value = result.imgUrls;
+        refreshImgDisplay();
+    };
+    if (sync) {
+        chrome.storage.sync.get("imgUrls", main);
+    }
+    else {
+        chrome.storage.local.get("imgUrls", main);
+    }
+}
 
 imgUrls.addEventListener("change", (e) => {
     chrome.storage.local.set({"imgUrls": imgUrls.value});
+    if (sync) {
+        chrome.storage.sync.set({"imgUrls": imgUrls.value});
+    }
     refreshImgDisplay();
 });
 
@@ -51,6 +78,9 @@ imgUpload.addEventListener("change", (e) => {
         imgUrls.value += reader.result;
 
         chrome.storage.local.set({"imgUrls": imgUrls.value});
+        if (sync) {
+            chrome.storage.sync.set({"imgUrls": imgUrls.value});
+        }
         refreshImgDisplay();
     });
 
@@ -61,14 +91,7 @@ Array.from(document.getElementsByClassName("format")).forEach((btn) => {
     btn.addEventListener("change", (e) => {
         if (btn.checked) {
             chrome.storage.local.set({"format": btn.value});
-        }
-    });
-});
-
-chrome.storage.local.get("format", (result) => {
-    Array.from(document.getElementsByClassName("format")).forEach((btn) => {
-        if (result.format == btn.value) {
-            btn.checked = true;
+            chrome.storage.sync.set({"format": btn.value});
         }
     });
 });
@@ -77,6 +100,7 @@ Array.from(document.getElementsByClassName("posX")).forEach((btn) => {
     btn.addEventListener("change", (e) => {
         if (btn.checked) {
             chrome.storage.local.set({"posX": btn.value});
+            chrome.storage.sync.set({"posX": btn.value});
         }
     });
 });
@@ -84,21 +108,47 @@ Array.from(document.getElementsByClassName("posY")).forEach((btn) => {
     btn.addEventListener("change", (e) => {
         if (btn.checked) {
             chrome.storage.local.set({"posY": btn.value});
+            chrome.storage.sync.set({"posY": btn.value});
         }
     });
 });
 
-chrome.storage.local.get("posX", (result) => {
-    Array.from(document.getElementsByClassName("posX")).forEach((btn) => {
-        if (result.posX == btn.value) {
-            btn.checked = true;
-        }
-    });
+{
+    let main = (result) => {
+        Array.from(document.getElementsByClassName("format")).forEach((btn) => {
+            if (result.format == btn.value) {
+                btn.checked = true;
+            }
+        });
+
+        Array.from(document.getElementsByClassName("posX")).forEach((btn) => {
+            if (result.posX == btn.value) {
+                btn.checked = true;
+            }
+        });
+        Array.from(document.getElementsByClassName("posY")).forEach((btn) => {
+            if (result.posY == btn.value) {
+                btn.checked = true;
+            }
+        });
+    };
+    if (sync) {
+        chrome.storage.sync.get(["format", "posX", "posY"], main);
+    }
+    else {
+        chrome.storage.local.get(["format", "posX", "posY"], main);
+    }
+}
+
+chrome.storage.sync.get("sync", (result) => {
+    syncBtn.checked = result.sync;
 });
-chrome.storage.local.get("posY", (result) => {
-    Array.from(document.getElementsByClassName("posY")).forEach((btn) => {
-        if (result.posY == btn.value) {
-            btn.checked = true;
-        }
-    });
+
+syncBtn.addEventListener("change", (e) => {
+    if (e.currentTarget.checked) {
+        chrome.storage.sync.set({"sync": true});
+    }
+    else {
+        chrome.storage.sync.set({"sync": false});
+    }
 });
